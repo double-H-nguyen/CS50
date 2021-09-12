@@ -5,7 +5,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
@@ -22,6 +25,8 @@
       integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
       crossorigin="anonymous"
     ></script>
+    <script src="tennis.js"></script>
+
     <link href="styles.css" rel="stylesheet" />
     <link href="tennis.css" rel="stylesheet" />
     <title>My Webpage - Tennis</title>
@@ -29,70 +34,95 @@
 
   <body>
     <!-- TODO: Add proper navbar -->
-    <a href="index.html">Home</a>
-    <a href="tennis.html">Tennis</a>
-    <a href="space.html">Space</a>
-    <a href="games.html">Video Games</a>
 
-    <h1>Tennis</h1>
+    <div class="container">
+      <a href="index.html">Home</a>
+      <a href="tennis.html">Tennis</a>
+      <a href="space.html">Space</a>
+      <a href="games.html">Video Games</a>
 
-    <table class="table table-bordered">
-      <tbody>
-        <tr>
-          <th scope="row">Tennis "Career"</th>
-          <td>
-            <ul>
-              <li>2008: picked up the racket for the first time</li>
-              <li>2009-2010: played for middle school's tennis team</li>
-              <li>2011-2014: played for high school's varsity tennis team</li>
-              <li>2014-2016: worked in a tennis shop</li>
-              <li>2015+: playing casually and making friends along the way</li>
-              <li>...</li>
-              <li>Future: world's oldest amateur player</li>
-            </ul>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row">NTRP Rating</th>
-          <td>3.0-3.5</td>
-        </tr>
-        <tr>
-          <th scope="row">Favorite Pro Tennis Players</th>
-          <td>
-            <ul>
-              <li>Roger Federer</li>
-              <li>Leylah Fernandez</li>
-            </ul>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row">Play Style</th>
-          <td>
-            <ul>
-              <li>Grip style: Semi-western</li>
-              <!-- TODO: add tool tip when hovering over playing style -->
-              <!-- The Counter Puncher is a reactor; a worthy and able opponent who will often wait for his opponent to do something and then react or counter punch. These players are very consistent, fit, persistent and play great defense. They don't have any big weapons; instead they will often take big hitters out of their games engaging them in long slow rallies.? The Counter Puncher is usually not the strongest or the biggest but their style is sometimes very hard to beat.-->
-              <li>Playing style: Counter Puncher</li>
-            </ul>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row">Racket</th>
-          <td>
-            <ul>
-              <li>
-                Racket:
-                <a
-                  href="https://www.tennis-warehouse.com/learning_center/racquet_reviews/hyipsreview.html"
-                  >Head YOUTEK IG Prestige S</a
-                >
-              </li>
-              <li>Strings: Technifibre NRG2 17g (multi-filament) @ 54lb</li>
-              <li>Grip: Head Prestige Pro Racquet Overgrip</li>
-            </ul>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <h1 class="display-1">Tennis</h1>
+      <!-- TODO: add background stock tennis image behind the header -->
+
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <th class="align-middle" scope="row">Tennis "Career"</th>
+            <td>
+              <ul>
+                <li>2008: picked up the racket for the first time</li>
+                <li>2009-2010: played for middle school's tennis team</li>
+                <li>2011-2014: played for high school's varsity tennis team</li>
+                <li>2014-2016: worked in a tennis shop</li>
+                <li>
+                  2015+: playing casually and making friends along the way
+                </li>
+                <li>...</li>
+                <li>Future: world's oldest amateur player</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th class="align-middle" scope="row">NTRP Rating</th>
+            <td>
+              <p class="h4">3.5</p>
+              <p>
+                This player has achieved stroke dependability with directional
+                control on moderate shots, but still lacks depth, variety and
+                the ability to alter distance of shots. The effective use of
+                lobs, Overheads, approach shots, and volleys is limited. This
+                player is more comfortable at the net, has improved court
+                awareness, and is developing teamwork in doubles.
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <th class="align-middle" scope="row">
+              Favorite Pro Tennis Players
+            </th>
+            <td>
+              <ul>
+                <li>Roger Federer</li>
+                <li>Leylah Fernandez</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th class="align-middle" scope="row">Play Style</th>
+            <td>
+              <ul>
+                <li>Grip style: Semi-western</li>
+                <li>
+                  Playing style:
+                  <a
+                    href="#"
+                    data-toggle="tooltip"
+                    title="The Counter Puncher will often wait for his opponent to do something and then react or counter punch. These players are very consistent, fit, persistent and play great defense. They don't have any big weapons; instead they will often take big hitters out of their games engaging them in long slow rallies."
+                    >Counter Puncher</a
+                  >
+                </li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th class="align-middle" scope="row">Racket</th>
+            <td>
+              <ul>
+                <li>
+                  Racket:
+                  <a
+                    href="https://www.tennis-warehouse.com/learning_center/racquet_reviews/hyipsreview.html"
+                    target="_blank"
+                    >Head YOUTEK IG Prestige S</a
+                  >
+                </li>
+                <li>Strings: Technifibre NRG2 17g (multi-filament) @ 54lb</li>
+                <li>Grip: Head Prestige Pro Racquet Overgrip</li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </body>
 </html>
