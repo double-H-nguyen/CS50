@@ -1,0 +1,20 @@
+.featurette-heading {
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.05rem;
+}
+
+#mass-effect-img {
+  max-width: 60%;
+  height: auto;
+}
+
+#warframe-img {
+  max-width: 85%;
+  height: auto;
+}
+
+#satisfactory-img {
+  max-width: 65%;
+  height: auto;
+}
