@@ -1,0 +1,45 @@
+/* * rem values based on assumption that default font-size is 16px */
+
+.gallery-row {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.gallery-row .gallery-col {
+  flex: 33.3%; /* for 3 three columns */
+  width: auto;
+  overflow: hidden;
+  padding: 0 0.25rem;
+  height: 100%;
+}
+
+.gallery-row .gallery-col img {
+  margin-top: 2%;
+  width: 100%;
+  height: 100%;
+  filter: grayscale(80%) brightness(50%);
+  border-radius: 0.32rem;
+  transition: 0.3s linear;
+}
+
+.gallery-row .gallery-col img:hover {
+  filter: grayscale(0%) brightness(100%);
+}
+
+/* making it responsive */
+@media only screen and (max-width: 800px) {
+  .gallery-row .gallery-col {
+    flex: 50%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .gallery-row .gallery-col {
+    flex: 100%;
+  }
+
+  .gallery-row .gallery-col img {
+    filter: grayscale(0%) brightness(100%);
+  }
+}
