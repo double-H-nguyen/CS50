@@ -1,0 +1,62 @@
+/** rem values based on assumption that default font-size is 16px */
+
+/** Base structure */
+html,
+body {
+  height: 100%;
+  padding-bottom: 0;
+  background-color: #fff;
+}
+
+body {
+  color: #fff;
+  /* color: black; */
+  text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 5rem rgba(0, 0, 0, 0.5);
+
+  /* background image */
+  background: url(https://images.pexels.com/photos/220201/pexels-photo-220201.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.cover-container {
+  max-width: 70%;
+  height: 90%;
+}
+
+/** Header */
+.masthead {
+  margin-bottom: 2rem;
+}
+
+/** Cover */
+.cover {
+  background-color: rgba(160, 160, 160, 0.8);
+  border-radius: 0.5rem;
+  padding: 2rem;
+}
+
+/** Footer */
+.mastfoot {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.mastfoot a {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+
+/** Responsive */
+@media (max-width: 800px) {
+  .cover-container {
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 600px) {
+  .cover-container {
+    max-width: 100%;
+  }
+}
