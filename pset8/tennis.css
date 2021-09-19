@@ -1,4 +1,4 @@
-/* * rem values based on assumption that default font-size is 16px */
+/** rem values based on assumption that default font-size is 16px */
 
 .tennis-display-subheader {
   margin-left: 0.5rem;

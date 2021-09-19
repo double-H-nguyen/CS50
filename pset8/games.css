@@ -1,3 +1,5 @@
+/** rem values based on assumption that default font-size is 16px */
+
 .featurette-heading {
   font-weight: 300;
   line-height: 1;
