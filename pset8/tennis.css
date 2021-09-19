@@ -1,0 +1,40 @@
+/* * rem values based on assumption that default font-size is 16px */
+
+.tennis-display-subheader {
+  margin-left: 0.5rem;
+}
+
+/* overwrite bootstrap css for h3 to next add extra margin in d-flex table */
+.th-h3 {
+  margin-bottom: 0rem;
+}
+
+a .text-muted {
+  text-decoration: underline;
+}
+
+.player-name {
+  font-size: 2rem;
+  font-weight: 200;
+  line-height: 1;
+  letter-spacing: 0.2rem;
+}
+
+.player-img {
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 800px) {
+  .player-name {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .player-name {
+    font-size: 0.8rem;
+    letter-spacing: 0;
+  }
+}
