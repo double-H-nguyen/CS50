@@ -120,6 +120,18 @@ def quote():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
+    # TODO: allows a user to register for an account via a form
+
+    # TODO: create if-block for POST method
+        # TODO: check username input; render an apology if the user’s input is blank or the username already exists
+        # TODO: check both password and confirmation password input; render an apology if either input is blank or the passwords do not match
+        # TODO: convert password to hash, then insert hash
+        # TODO: INSERT user into users table (finance.db)
+        # TODO: automatically log user and redirect to index ("/")
+
+
+    # TODO: create block  for GET method
+    # TODO: render registration form (register.html)
     return apology("TODO")
 
 
