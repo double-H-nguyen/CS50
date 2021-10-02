@@ -120,19 +120,48 @@ def quote():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
-    # TODO: allows a user to register for an account via a form
 
-    # TODO: create if-block for POST method
-        # TODO: check username input; render an apology if the user’s input is blank or the username already exists
-        # TODO: check both password and confirmation password input; render an apology if either input is blank or the passwords do not match
-        # TODO: convert password to hash, then insert hash
-        # TODO: INSERT user into users table (finance.db)
-        # TODO: automatically log user and redirect to index ("/")
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
 
+        # Check if username is blank
+        if not username:
+            return apology("Username cannot be blank")
 
-    # TODO: create block  for GET method
-    # TODO: render registration form (register.html)
-    return apology("TODO")
+        # Query database for username
+        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+
+        # Check if username already exists
+        if len(rows) > 0:
+            return apology("Username already exist")
+
+        # Check if password or confirmation password is blank
+        if not password or not confirmation:
+            return apology("Password and/or confirmation input is blank")
+
+        # Check if password match
+        if password != confirmation:
+            return apology("Passwords do not match")
+
+        # Hash password
+        password = generate_password_hash(password)
+
+        # INSERT user into users table (finance.db)
+        db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", username, password)
+
+        # Automatically log user, and redirect to index()
+        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+        session["user_id"] = rows[0]["id"]
+        return redirect("/")
+
+        # TODO: remove once you verified redirect works
+        # Redirect to login page
+        # return redirect("/login")
+
+    # GET method
+    return render_template("register.html")
 
 
 @app.route("/sell", methods=["GET", "POST"])
