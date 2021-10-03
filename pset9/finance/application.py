@@ -114,7 +114,13 @@ def logout():
 @login_required
 def quote():
     """Get stock quote."""
-    return apology("TODO")
+    if request.method == "POST":
+        symbol = request.form.get("symbol")
+        symbol_dict = lookup(symbol)
+        return render_template("quoted.html", stock=symbol_dict)
+
+    # GET
+    return render_template("quote.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -155,10 +161,6 @@ def register():
         rows = db.execute("SELECT * FROM users WHERE username = ?", username)
         session["user_id"] = rows[0]["id"]
         return redirect("/")
-
-        # TODO: remove once you verified redirect works
-        # Redirect to login page
-        # return redirect("/login")
 
     # GET method
     return render_template("register.html")
