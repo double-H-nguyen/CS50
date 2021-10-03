@@ -46,7 +46,30 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    return apology("TODO")
+    user_id = session["user_id"]
+
+    user = db.execute("SELECT username, cash FROM users WHERE id=?", user_id)[0]
+    username = user["username"]
+    cash = user["cash"]
+    
+    # TODO: query stocks the user own from transactions table
+    stocks_bought = db.execute("SELECT symbol, name, SUM(shares) AS shares FROM transactions WHERE type='buy' AND user_id=? GROUP BY symbol ORDER BY symbol ASC", user_id)
+    # TODO: take into account for sell transactions
+    stocks = stocks_bought
+
+    # Add current stock price and total value to stock dictionary
+    for stock in stocks:
+        stock["price"] = lookup(stock["symbol"])["price"]
+        stock["total_value"] = stock["price"] * stock["shares"]
+    # * Stock data structure {'symbol': _, 'name': _, 'shares': _, 'price':_, 'total_value': _}
+
+    # Calculate grand total value
+    grand_total = 0
+    grand_total += cash
+    for stock in stocks:
+        grand_total += stock["total_value"]
+    
+    return render_template("index.html", username=username, cash=cash, grand_total=grand_total, stocks=stocks)
 
 
 @app.route("/buy", methods=["GET", "POST"])
