@@ -161,7 +161,7 @@ def quote():
     if request.method == "POST":
         symbol = request.form.get("symbol")
         symbol_dict = lookup(symbol)
-        return render_template("quoted.html", stock=symbol_dict)
+        return render_template("quoted.html", stock_name=symbol_dict["name"], stock_symbol=symbol_dict["symbol"], stock_price=symbol_dict["price"])
 
     # GET
     return render_template("quote.html")
