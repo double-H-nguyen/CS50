@@ -6,12 +6,27 @@
 <h1>Buy Stock(s)</h1>
 <form action="/buy" method="post">
   <div class="form-group">
-    <input name="symbol" type="text" class="form-control" placeholder="Symbol" autocomplete="off" autofocus />
+    <input id="symbol" name="symbol" type="text" class="form-control" placeholder="Symbol" autocomplete="off" autofocus />
+    <small id="stock-info" class="form-text text-muted"></small>
   </div>
-  <!-- TODO: add label or text that updates the stock price when user updates the symbol field -->
   <div class="form-group">
     <input name="shares" type="text" class="form-control" placeholder="Number of Shares" autocomplete="off" autofocus />
   </div>
   <button class="btn btn-primary" type="submit">Buy</button>
 </form>
+
+<script>
+  let symbol_input = document.querySelector("#symbol")
+  let stock_info_text = document.querySelector("#stock-info")
+
+  symbol_input.addEventListener("keyup", function () {
+    $.get(`/search?q=${symbol_input.value}`, function (stock) {
+      let text = ""
+      if (stock) {
+        text = `${stock.name} (${stock.symbol}) costs $${stock.price} per share`
+      }
+      stock_info_text.innerHTML = text
+    })
+  })
+</script>
 {% endblock %}

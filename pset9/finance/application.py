@@ -1,7 +1,7 @@
 import os
 
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session, jsonify
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
@@ -87,9 +87,17 @@ def buy():
         # Redirect to the index page
         return redirect("/")
 
-    # TODO: return current stock price using lookup (this should update via ajax)
     # GET
     return render_template("buy.html")
+
+
+# * This route is specifically for using AJAX to query for the stock info
+@app.route("/search")
+@login_required
+def search():
+    symbol = request.args.get("q")
+    stock_dict = lookup(symbol)
+    return jsonify(stock_dict)
 
 
 @app.route("/history")
