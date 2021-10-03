@@ -53,7 +53,42 @@ def index():
 @login_required
 def buy():
     """Buy shares of stock"""
-    return apology("TODO")
+    # POST
+    if request.method == "POST":
+        symbol = request.form.get("symbol")
+        shares = request.form.get("shares")
+
+        if not symbol:
+            return apology("Symbol cannot be blank")
+        if not lookup(symbol):
+            return apology("Symbol does not exist")
+        
+        if not shares:
+            return apology("Shares cannot be blank")
+        shares = int(shares)
+        if shares <= 0:
+            return apology("Must enter 1 or more shares")
+
+        stock_dict = lookup(symbol)
+
+        stock_price_per_share = stock_dict["price"]
+        cash_available = db.execute("SELECT cash FROM users WHERE id=?", session["user_id"])[0]["cash"]
+        if cash_available < stock_price_per_share * shares:
+            return apology("You do not have enough funds to buy the current stock amount")
+
+        # Insert transaction in transactions table
+        db.execute("INSERT INTO transactions (user_id,transaction_type,date,symbol,price,shares) VALUES (?,?,datetime('now'),?,?,?)", session["user_id"], "buy", stock_dict["symbol"], stock_dict["price"], shares)
+
+        # Update cash amount in users table
+        remaining_cash = cash_available - (stock_price_per_share * shares)
+        db.execute("UPDATE users SET cash=? WHERE id=?", remaining_cash, session["user_id"])
+
+        # Redirect to the index page
+        return redirect("/")
+
+    # TODO: return current stock price using lookup (this should update via ajax)
+    # GET
+    return render_template("buy.html")
 
 
 @app.route("/history")
