@@ -52,10 +52,8 @@ def index():
     username = user["username"]
     cash = user["cash"]
     
-    # TODO: query stocks the user own from transactions table
-    stocks_bought = db.execute("SELECT symbol, name, SUM(shares) AS shares FROM transactions WHERE type='buy' AND user_id=? GROUP BY symbol ORDER BY symbol ASC", user_id)
-    # TODO: take into account for sell transactions
-    stocks = stocks_bought
+    # Query stocks that user owns from ownership table
+    stocks = db.execute("SELECT symbol, name, shares FROM ownership WHERE user_id=? ORDER BY symbol ASC", user_id)
 
     # Add current stock price and total value to stock dictionary
     for stock in stocks:
@@ -106,6 +104,15 @@ def buy():
 
         # Update cash amount in users table
         db.execute("UPDATE users SET cash=? WHERE id=?", remaining_cash, user_id)
+
+        # Insert/Update stock in ownership table
+        ownership_shares_row = db.execute("SELECT shares FROM ownership WHERE user_id=? AND symbol=?", user_id, stock_dict["symbol"])
+        if not ownership_shares_row: # If user doesn't currently own the stock, insert into table with shares bought
+            db.execute("INSERT INTO ownership (user_id, name, symbol, shares) VALUES (?,?,?,?)", user_id, stock_dict["name"], stock_dict["symbol"], shares)
+        else: # update shares of existing stock
+            ownership_shares = ownership_shares_row[0]["shares"]
+            ownership_shares += shares 
+            db.execute("UPDATE ownership SET shares=? WHERE user_id=? AND symbol=?", ownership_shares, user_id, stock_dict["symbol"])
 
         # Redirect to the index page
         return redirect("/")
