@@ -70,18 +70,19 @@ def buy():
             return apology("Must enter 1 or more shares")
 
         stock_dict = lookup(symbol)
+        user_id = session["user_id"]
 
         stock_price_per_share = stock_dict["price"]
-        cash_available = db.execute("SELECT cash FROM users WHERE id=?", session["user_id"])[0]["cash"]
-        if cash_available < stock_price_per_share * shares:
+        cash_available = db.execute("SELECT cash FROM users WHERE id=?", user_id)[0]["cash"]
+        remaining_cash = cash_available - (stock_price_per_share * shares)
+        if remaining_cash < 0:
             return apology("You do not have enough funds to buy the current stock amount")
 
         # Insert transaction in transactions table
-        db.execute("INSERT INTO transactions (user_id,transaction_type,date,symbol,price,shares) VALUES (?,?,datetime('now'),?,?,?)", session["user_id"], "buy", stock_dict["symbol"], stock_dict["price"], shares)
+        db.execute("INSERT INTO transactions (user_id,type,name,symbol,price,shares) VALUES (?,?,?,?,?,?)", user_id, "buy", stock_dict["name"], stock_dict["symbol"], stock_price_per_share, shares)
 
         # Update cash amount in users table
-        remaining_cash = cash_available - (stock_price_per_share * shares)
-        db.execute("UPDATE users SET cash=? WHERE id=?", remaining_cash, session["user_id"])
+        db.execute("UPDATE users SET cash=? WHERE id=?", remaining_cash, user_id)
 
         # Redirect to the index page
         return redirect("/")
