@@ -1,0 +1,37 @@
+{% extends "layout.html" %} 
+
+{% block title %} Sell {% endblock %} 
+
+{% block main %}
+<h1>Sell Stock(s)</h1>
+<form action="/sell" method="post">
+  <div class="form-group">
+    <select class="form-control" id="symbol" name="symbol" autofocus>
+      <option value="" disabled selected>Select a stock</option>
+      {% for symbol_dict in symbols %}
+      <option value="{{ symbol_dict.symbol }}">{{ symbol_dict.symbol }}</option>
+      {% endfor %}
+    </select>
+    <small id="stock-info" class="form-text text-muted"></small>
+  </div>
+  <div class="form-group">
+    <input name="shares" type="text" class="form-control" placeholder="Number of Shares" autocomplete="off" autofocus />
+  </div>
+  <button class="btn btn-primary" type="submit">Sell</button>
+</form>
+
+<script>
+  let symbol_input = document.querySelector("#symbol")
+  let stock_info_text = document.querySelector("#stock-info")
+
+  symbol_input.addEventListener("change", function () {
+    $.get(`/search?q=${symbol_input.value}`, function (stock) {
+      let text = ""
+      if (stock) {
+        text = `${stock.name} (${stock.symbol}) costs $${stock.price} per share`
+      }
+      stock_info_text.innerHTML = text
+    })
+  })
+</script>
+{% endblock %}

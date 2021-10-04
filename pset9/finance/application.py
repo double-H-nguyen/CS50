@@ -86,6 +86,8 @@ def buy():
         
         if not shares:
             return apology("Shares cannot be blank")
+        if not shares.isdigit():
+            return apology("Only include numbers")
         shares = int(shares)
         if shares <= 0:
             return apology("Must enter 1 or more shares")
@@ -244,7 +246,61 @@ def register():
 @login_required
 def sell():
     """Sell shares of stock"""
-    return apology("TODO")
+    user_id = session["user_id"]
+    
+    # POST
+    if request.method == "POST":
+        symbol_input = request.form.get("symbol")
+        shares_input = request.form.get("shares")
+
+        # Check if user input a stock
+        if not symbol_input:
+            return apology("Select a stock to sell")
+        
+        # Check if stock exists
+        stock_dict = lookup(symbol_input)
+        if not stock_dict:
+            return apology("This stock does not exist")
+
+        # Check if shares input is a positive integer
+        if not shares_input.isdigit():
+            return apology("Only include numbers")
+        shares_input = int(shares_input)
+        if shares_input <= 0:
+            return apology("Must enter 1 or more shares")
+        
+        # Check if user own the stock they are selling
+        shares_owned_row = db.execute("SELECT shares FROM ownership WHERE user_id=? AND symbol=?", user_id, stock_dict["symbol"])
+        if not shares_owned_row:
+            return apology("You do not own any shares of this stock")
+        shares_owned = shares_owned_row[0]["shares"]
+
+        # Check if user is able to sell the number of shares they have inputed
+        if shares_owned < shares_input:
+            return apology("You cannot sell more shares than you own")
+
+        # Insert transaction in transactions table
+        db.execute("INSERT INTO transactions (user_id,type,name,symbol,price,shares) VALUES (?,?,?,?,?,?)", user_id, "sell", stock_dict["name"], stock_dict["symbol"], stock_dict["price"], shares_input)
+
+        # Update cash amount in users table
+        cash = db.execute("SELECT cash from users WHERE id=?", user_id)[0]["cash"]
+        new_cash_balance = cash + (stock_dict["price"] * shares_input)
+        db.execute("UPDATE users SET cash=? WHERE id=?", new_cash_balance, user_id)
+
+        # Update/Delete from ownership table
+        shares_left = shares_owned - shares_input
+        if shares_left <= 0: # delete stock from ownership table
+            db.execute("DELETE from ownership WHERE user_id=? AND symbol=?", user_id, stock_dict["symbol"])
+        else: # update shares in ownership table
+            db.execute("UPDATE ownership SET shares=? WHERE user_id=? AND symbol=?", shares_left, user_id, stock_dict["symbol"])
+        
+        # Redirect to index
+        return redirect("/")
+    
+    # GET
+    # * [{'symbol': _}, ...]
+    symbols = db.execute("SELECT symbol FROM ownership WHERE user_id=? ORDER BY symbol ASC", user_id)
+    return render_template("sell.html", symbols=symbols)
 
 
 def errorhandler(e):
