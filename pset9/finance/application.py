@@ -136,7 +136,14 @@ def search():
 @login_required
 def history():
     """Show history of transactions"""
-    return apology("TODO")
+    user_id = session["user_id"]
+    transactions = db.execute("SELECT type, symbol, price, shares, date FROM transactions WHERE user_id=? ORDER BY date DESC", user_id)
+
+    # if no transactions were queried
+    if not transactions:
+        transactions = []
+
+    return render_template("history.html", transactions=transactions)
 
 
 @app.route("/login", methods=["GET", "POST"])
