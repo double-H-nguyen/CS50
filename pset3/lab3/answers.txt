@@ -1,0 +1,8 @@
+sort1 uses: Bubble Sort
+How do you know?: If the array is already sorted then bubble sort does not need to swap any elements, then bubble sortWhen timing for the best-case scenario (50000 sorted elements), sort1 was much lower than sort3.
+
+sort2 uses: Merge Sort
+How do you know?: It took the least amount of time to sort 50000 random elements.
+
+sort3 uses: Selection Sort
+How do you know?: Even if the array is sorted, selection sort will still perform some actions. When timing for the best-case scenario (50000 sorted elements), sort3 was hgiher than sort1.
