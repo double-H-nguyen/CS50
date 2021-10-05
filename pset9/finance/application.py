@@ -86,9 +86,10 @@ def buy():
         
         if not shares:
             return apology("Shares cannot be blank")
-        if not shares.isdigit():
-            return apology("Only include numbers")
-        shares = int(shares)
+        try:
+            shares = int(shares)
+        except ValueError:
+            return apology("Only include whole numbers")
         if shares <= 0:
             return apology("Must enter 1 or more shares")
 
@@ -270,9 +271,10 @@ def sell():
             return apology("This stock does not exist")
 
         # Check if shares input is a positive integer
-        if not shares_input.isdigit():
-            return apology("Only include numbers")
-        shares_input = int(shares_input)
+        try:
+            shares_input = int(shares_input)
+        except ValueError:
+            return apology("Only include whole numbers")
         if shares_input <= 0:
             return apology("Must enter 1 or more shares")
         
