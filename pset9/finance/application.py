@@ -341,6 +341,45 @@ def addcash():
     cash = db.execute("SELECT cash FROM users WHERE id=?", user_id)[0]["cash"]
     return render_template("addcash.html", cash=cash)
 
+
+@app.route("/changepassword", methods=["GET", "POST"])
+@login_required
+def changepassword():
+    user_id = session["user_id"]
+    if request.method == "POST":
+        original_password_input = request.form.get("original")
+        new_password_input = request.form.get("new")
+        confirmation_input = request.form.get("confirmation")
+
+        # Check no inputs were blank
+        if not original_password_input or not new_password_input or not confirmation_input:
+            return apology("Inputs cannot be blank")
+
+        # Check original password matches
+        original_hash = db.execute("SELECT hash FROM users WHERE id=?", user_id)[0]["hash"]
+        if not check_password_hash(original_hash, original_password_input):
+            return apology("Incorrect password")
+
+        # Check new password doesn't match original password
+        if original_password_input == new_password_input:
+            return apology("New password cannot be the same as the original")
+
+        # Check new password and confirmation match
+        if new_password_input != confirmation_input:
+            return apology("New passwords entered did not match each other")
+
+        # Hash new password
+        new_password_hash = generate_password_hash(new_password_input)
+
+        # Updates users table with new password hash
+        db.execute("UPDATE users SET hash=? WHERE id=?", new_password_hash, user_id)
+
+        # Redirect to index
+        return redirect("/")
+
+    return render_template("changepassword.html")
+
+
 def errorhandler(e):
     """Handle error"""
     if not isinstance(e, HTTPException):
