@@ -103,19 +103,24 @@ def buy():
             return apology("You do not have enough funds to buy the current stock amount")
 
         # Insert transaction in transactions table
-        db.execute("INSERT INTO transactions (user_id,type,name,symbol,price,shares) VALUES (?,?,?,?,?,?)", user_id, "buy", stock_dict["name"], stock_dict["symbol"], stock_price_per_share, shares)
+        db.execute("INSERT INTO transactions (user_id,type,name,symbol,price,shares) VALUES (?,?,?,?,?,?)",
+                    user_id, "buy", stock_dict["name"], stock_dict["symbol"], stock_price_per_share, shares)
 
         # Update cash amount in users table
         db.execute("UPDATE users SET cash=? WHERE id=?", remaining_cash, user_id)
 
         # Insert/Update stock in ownership table
-        ownership_shares_row = db.execute("SELECT shares FROM ownership WHERE user_id=? AND symbol=?", user_id, stock_dict["symbol"])
-        if not ownership_shares_row: # If user doesn't currently own the stock, insert into table with shares bought
-            db.execute("INSERT INTO ownership (user_id, name, symbol, shares) VALUES (?,?,?,?)", user_id, stock_dict["name"], stock_dict["symbol"], shares)
+        ownership_shares_row = db.execute("SELECT shares FROM ownership WHERE user_id=? AND symbol=?",
+                                        user_id, stock_dict["symbol"])
+        # If user doesn't currently own the stock, insert into table with shares bought
+        if not ownership_shares_row:
+            db.execute("INSERT INTO ownership (user_id, name, symbol, shares) VALUES (?,?,?,?)",
+                    user_id, stock_dict["name"], stock_dict["symbol"], shares)
         else: # update shares of existing stock
             ownership_shares = ownership_shares_row[0]["shares"]
             ownership_shares += shares 
-            db.execute("UPDATE ownership SET shares=? WHERE user_id=? AND symbol=?", ownership_shares, user_id, stock_dict["symbol"])
+            db.execute("UPDATE ownership SET shares=? WHERE user_id=? AND symbol=?",
+                        ownership_shares, user_id, stock_dict["symbol"])
 
         # Redirect to the index page
         return redirect("/")
@@ -138,7 +143,8 @@ def search():
 def history():
     """Show history of transactions"""
     user_id = session["user_id"]
-    transactions = db.execute("SELECT type, symbol, price, shares, date FROM transactions WHERE user_id=? ORDER BY date DESC", user_id)
+    transactions = db.execute(
+        "SELECT type, symbol, price, shares, date FROM transactions WHERE user_id=? ORDER BY date DESC", user_id)
 
     # if no transactions were queried
     if not transactions:
@@ -286,7 +292,8 @@ def sell():
             return apology("Must enter 1 or more shares")
         
         # Check if user own the stock they are selling
-        shares_owned_row = db.execute("SELECT shares FROM ownership WHERE user_id=? AND symbol=?", user_id, stock_dict["symbol"])
+        shares_owned_row = db.execute("SELECT shares FROM ownership WHERE user_id=? AND symbol=?",
+                                    user_id, stock_dict["symbol"])
         if not shares_owned_row:
             return apology("You do not own any shares of this stock")
         shares_owned = shares_owned_row[0]["shares"]
@@ -296,7 +303,8 @@ def sell():
             return apology("You cannot sell more shares than you own")
 
         # Insert transaction in transactions table
-        db.execute("INSERT INTO transactions (user_id,type,name,symbol,price,shares) VALUES (?,?,?,?,?,?)", user_id, "sell", stock_dict["name"], stock_dict["symbol"], stock_dict["price"], shares_input)
+        db.execute("INSERT INTO transactions (user_id,type,name,symbol,price,shares) VALUES (?,?,?,?,?,?)",
+            user_id, "sell", stock_dict["name"], stock_dict["symbol"], stock_dict["price"], shares_input)
 
         # Update cash amount in users table
         cash = db.execute("SELECT cash from users WHERE id=?", user_id)[0]["cash"]
@@ -305,10 +313,14 @@ def sell():
 
         # Update/Delete from ownership table
         shares_left = shares_owned - shares_input
-        if shares_left <= 0: # delete stock from ownership table
+
+        # delete stock from ownership table
+        if shares_left <= 0: 
             db.execute("DELETE from ownership WHERE user_id=? AND symbol=?", user_id, stock_dict["symbol"])
-        else: # update shares in ownership table
-            db.execute("UPDATE ownership SET shares=? WHERE user_id=? AND symbol=?", shares_left, user_id, stock_dict["symbol"])
+        # update shares in ownership table
+        else: 
+            db.execute("UPDATE ownership SET shares=? WHERE user_id=? AND symbol=?",
+                        shares_left, user_id, stock_dict["symbol"])
         
         # Redirect to index
         return redirect("/")
