@@ -2,7 +2,7 @@
 <div class="container text-left">
   <h1>{{ username }}'s Dashboard</h1>
   <hr />
-  <p class="h4">Cash available: {{ cash | usd }}</p>
+  <p class="h4">Cash available: {{ cash | usd }} <a class="btn btn-sm btn-outline-success" href="/addcash">Add Cash</a></p>
   <p class="h4">Total value: {{ grand_total | usd }}</p>
 
   <table class="table">

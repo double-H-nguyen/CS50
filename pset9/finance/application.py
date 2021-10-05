@@ -310,6 +310,35 @@ def sell():
     return render_template("sell.html", symbols=symbols)
 
 
+@app.route("/addcash", methods=["GET", "POST"])
+@login_required
+def addcash():
+    user_id = session["user_id"]
+    # POST
+    if request.method == "POST":
+        cash_input = request.form.get("cash")
+
+        # Validation
+        if not cash_input:
+            return apology("Input cannot be blank")
+        try:
+            cash_input = float(cash_input)
+        except ValueError:
+            return apology("Decimal values only (i.e. no '$')")
+        if cash_input <= 0:
+            return apology("Input must be a positive number")
+
+        # Update cash fund
+        cash = db.execute("SELECT cash from users WHERE id=?", user_id)[0]["cash"]
+        cash += cash_input
+        db.execute("UPDATE users SET cash=? WHERE id=?", cash, user_id)
+        
+        return redirect("/")
+
+    # GET
+    cash = db.execute("SELECT cash FROM users WHERE id=?", user_id)[0]["cash"]
+    return render_template("addcash.html", cash=cash)
+
 def errorhandler(e):
     """Handle error"""
     if not isinstance(e, HTTPException):
