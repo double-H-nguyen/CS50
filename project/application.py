@@ -5,6 +5,8 @@ from flask_session import Session
 from tempfile import mkdtemp
 from datetime import datetime
 
+#TODO replace request.form[""] with request.form.get() because .get() will return None of no input is entered
+
 
 #*******************************************
 #* Application Configuration
@@ -86,11 +88,11 @@ def index():
 def add_goal():
   user_id = 1 #! HARD-CODED user_id
   if request.method == "POST":
+    #TODO: validate inputs on the front-end
     title = request.form['title']
     description = request.form['description']
     completions_required = request.form['completions_required']
     reward = request.form['reward']
-    #TODO: validate inputs
 
     # Add goal to database
     new_goal = Goals(title=title, description=description, num_of_completions_required=completions_required, reward=reward, user_id=user_id)
@@ -104,6 +106,35 @@ def add_goal():
   return render_template("add_goal.html")
 
 
+@app.route('/update_goal/<int:id>', methods=['GET', 'POST'])
+def update_goal(id):
+  # Query goal (if it exist)
+  goal = Goals.query.get_or_404(id) 
+
+  if request.method == "POST":
+    #TODO: validate inputs on the front-end
+    # Update goal to database
+    goal.title = request.form['title']
+    goal.description = request.form['description']
+    goal.completions_required = request.form['completions_required']
+    goal.num_of_completed = request.form['times_completed']
+    goal.reward = request.form['reward']
+
+    # Check if checkbox was checked
+    if request.form.get('is_completed'):
+      goal.is_completed = True     
+    else: # form returned NONE
+      goal.is_completed = False  
+
+    try:
+      db.session.commit()
+      return redirect('/')
+    except:
+      return 'Failed to update goal'
+
+  return render_template("update_goal.html", goal=goal)
+
+#TODO: Delete route
 #TODO: Create Register route
 #TODO: Create Login route
 
