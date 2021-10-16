@@ -4,7 +4,36 @@
 
 {% block main %}
 
-<h2>{{ msg }} </h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Title</th>
+      <th scope="col">Description</th>
+      <th scope="col">Progress</th>
+      <th scope="col">Reward</th>
+      <th scope="col">Date Created</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for goal in goals  %}
+    <tr>
+      <td>{{ goal.title }}</td>
+      <td>{{ goal.description }}</td>
+      <td>{{ goal.num_of_completed }}/{{ goal.num_of_completions_required }}</td>
+      <td>{{ goal.reward }}</td>
+      <td>{{ goal.date_created.date() }}</td>
+      <td>
+        <a href="">Increment</a>
+        <br>
+        <a href="">Update</a>
+        <br>
+        <a href="">Delete</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 
 {% endblock %}
 

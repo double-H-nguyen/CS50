@@ -72,12 +72,11 @@ class Goals(db.Model):
 #*******************************************
 @app.route('/', methods=['GET'])
 def index():
-  session["user_id"] = 1 #! HARD-CODED user_id
+  user_id = 1 #! HARD-CODED user_id
   
   # Query goals
   goals = Goals.query.all()
-  print(goals)
-  return render_template("index.html")
+  return render_template("index.html", goals=goals)
 
 
 @app.route('/add_goal', methods=['GET', 'POST'])
