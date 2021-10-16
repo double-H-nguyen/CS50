@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template, request
+from flask import Flask, redirect, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
 from tempfile import mkdtemp
@@ -39,6 +39,7 @@ Session(app)
 # 'from application import db'
 # 'db.create_all()'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///goal_tracker.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
@@ -59,21 +60,51 @@ class Goals(db.Model):
   num_of_completions_required = db.Column(db.Integer, nullable=False)
   reward = db.Column(db.Text, nullable=False)
   num_of_completed = db.Column(db.Integer, default=0, nullable=False)
-  date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+  date_created = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
   def __repr__(self):
-    return f'<User id={self.id}, title="{self.title}", description="{self.description}", num_of_completions_required={self.num_of_completions_required}, reward="{self.reward}", num_of_completed="{self.num_of_completed}" date={self.date}, user_id={self.user_id}>'
+    return f'<User id={self.id}, title="{self.title}", description="{self.description}", num_of_completions_required={self.num_of_completions_required}, reward="{self.reward}", num_of_completed="{self.num_of_completed}" date_created={self.date_created}, user_id={self.user_id}>'
 
 
 #*******************************************
 #* Routes
 #*******************************************
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
-  msg = "Hello world!"
-  return render_template("index.html", msg=msg)
+  session["user_id"] = 1 #! HARD-CODED user_id
+  
+  # Query goals
+  goals = Goals.query.all()
+  print(goals)
+  return render_template("index.html")
 
+
+@app.route('/add_goal', methods=['GET', 'POST'])
+def add_goal():
+  user_id = 1 #! HARD-CODED user_id
+  if request.method == "POST":
+    title = request.form['title']
+    description = request.form['description']
+    completions_required = request.form['completions_required']
+    reward = request.form['reward']
+    #TODO: validate inputs
+
+    # Add goal to database
+    new_goal = Goals(title=title, description=description, num_of_completions_required=completions_required, reward=reward, user_id=user_id)
+    try:
+      db.session.add(new_goal)
+      db.session.commit()
+      return redirect('/')
+    except:
+      return "Failed to add goal to database"
+
+  return render_template("add_goal.html")
+
+
+#TODO: Create Register route
+#TODO: Create Login route
 
 if __name__ == "__main__":
-  app.run(debug=True)
+  db.create_all() # create tables if they haven't already been created
+  app.run(debug=True) # debug mode enabled

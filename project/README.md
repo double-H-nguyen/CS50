@@ -11,14 +11,17 @@ This is a web-based tool that tracks the user's goals and the respective reward 
 ## Scope
 This will be a minimum-viable-product (MVP). I hope to improve upon it after taking the CS50 Web Programming course.
 
-The user will enter their goal, provide a description (optional), number of completions, and reward.
+The user will enter their goal, provide a description (optional), number of completions required, and reward.
 
-The user will log their progress by selecting their goal from a drop-down, their completion status (Yes/No), and select the date.
+The user will log their progress by pressing a button to increment their number of completed. When this value is equal to the number of completions, the reward will be unlocked.
 
 ## Technology Used
 * Flask
+  * SQLAlchemy
+  * Flask Session
 * JavaScript
   * jQuery (for ajax)
 * CSS
   * Bootstrap
 * HTML
+* Database - Sqlite
