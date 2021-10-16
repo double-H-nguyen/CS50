@@ -1,5 +1,6 @@
 from flask import Flask, redirect, render_template, request, session
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from flask_session import Session
 from tempfile import mkdtemp
 from datetime import datetime
@@ -41,6 +42,7 @@ Session(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///goal_tracker.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 
 class Users(db.Model):
@@ -60,6 +62,7 @@ class Goals(db.Model):
   num_of_completions_required = db.Column(db.Integer, nullable=False)
   reward = db.Column(db.Text, nullable=False)
   num_of_completed = db.Column(db.Integer, default=0, nullable=False)
+  is_completed = db.Column(db.Boolean, default=False, nullable=False)
   date_created = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 

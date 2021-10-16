@@ -20,9 +20,10 @@
     <tr>
       <td>{{ goal.title }}</td>
       <td>{{ goal.description }}</td>
-      <td>{{ goal.num_of_completed }}/{{ goal.num_of_completions_required }}</td>
-      <td>{{ goal.reward }}</td>
       <td>{{ goal.date_created.date() }}</td>
+      <td>{{ goal.num_of_completed }}/{{ goal.num_of_completions_required }}</td>
+      <td>{{ goal.is_completed }}</td>
+      <td>{{ goal.reward }}</td>
       <td>
         <a href="">Increment</a>
         <br>
