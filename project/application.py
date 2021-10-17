@@ -5,6 +5,8 @@ from flask_session import Session
 from tempfile import mkdtemp
 from datetime import datetime
 
+from helpers import login_required
+
 
 #*******************************************
 #* Application Configuration
@@ -74,8 +76,9 @@ class Goals(db.Model):
 #* Routes
 #*******************************************
 @app.route('/', methods=['GET'])
+@login_required
 def index():
-  user_id = 1 #! HARD-CODED user_id
+  user_id = session["user_id"]
   
   # Query goals
   goals = Goals.query.all()
@@ -83,8 +86,9 @@ def index():
 
 
 @app.route('/add_goal', methods=['GET', 'POST'])
+@login_required
 def add_goal():
-  user_id = 1 #! HARD-CODED user_id
+  user_id = session["user_id"]
   if request.method == "POST":
     #TODO: validate inputs on the front-end
     title = request.form.get('title')
@@ -105,6 +109,7 @@ def add_goal():
 
 
 @app.route('/update_goal/<int:id>', methods=['GET', 'POST'])
+@login_required
 def update_goal(id):
   # Query goal (if it exist)
   goal = Goals.query.get_or_404(id) 
@@ -134,6 +139,7 @@ def update_goal(id):
 
 
 @app.route('/delete_goal/<int:id>', methods=['GET', 'POST'])
+@login_required
 def delete_goal(id):
   goal = Goals.query.get_or_404(id) 
 
@@ -149,6 +155,7 @@ def delete_goal(id):
 
 
 @app.route('/increment/<int:id>', methods=['GET'])
+@login_required
 def increment(id):
   goal = Goals.query.get_or_404(id)
 
@@ -168,8 +175,35 @@ def increment(id):
     return 'Failed to increment goal'
 
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+  if request.method == "POST":
+    #TODO: input validation from helper function
+    username_input = request.form.get('username')
+    password_input = request.form.get('password')
+
+    # Query database for username
+    user = Users.query.filter_by(username=username_input).first()
+
+    #TODO: implement check_password_hash after register route is complete
+    # Check if username and password are correct
+    if (not user) or (user.password != password_input):
+      return 'Username or password was incorrect'
+
+    # Remember which user has logged in
+    session["user_id"] = user.id
+
+    # Redirect user to home page
+    return redirect("/")
+  
+  # GET
+  return render_template("login.html")
+
+
+#TODO: Create Logout route
 #TODO: Create Register route
-#TODO: Create Login route
+#TODO: Create Change password route
+#TODO: Create error message in helper function
 #TODO (optional): Allow user to delete their account (delete user and their goals)
 
 if __name__ == "__main__":
