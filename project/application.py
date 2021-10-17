@@ -5,8 +5,6 @@ from flask_session import Session
 from tempfile import mkdtemp
 from datetime import datetime
 
-#TODO replace request.form[""] with request.form.get() because .get() will return None of no input is entered
-
 
 #*******************************************
 #* Application Configuration
@@ -89,10 +87,10 @@ def add_goal():
   user_id = 1 #! HARD-CODED user_id
   if request.method == "POST":
     #TODO: validate inputs on the front-end
-    title = request.form['title']
-    description = request.form['description']
-    completions_required = request.form['completions_required']
-    reward = request.form['reward']
+    title = request.form.get('title')
+    description = request.form.get('description')
+    completions_required = request.form.get('completions_required')
+    reward = request.form.get('reward')
 
     # Add goal to database
     new_goal = Goals(title=title, description=description, num_of_completions_required=completions_required, reward=reward, user_id=user_id)
@@ -114,11 +112,11 @@ def update_goal(id):
   if request.method == "POST":
     #TODO: validate inputs on the front-end
     # Update goal to database
-    goal.title = request.form['title']
-    goal.description = request.form['description']
-    goal.completions_required = request.form['completions_required']
-    goal.num_of_completed = request.form['times_completed']
-    goal.reward = request.form['reward']
+    goal.title = request.form.get('title')
+    goal.description = request.form.get('description')
+    goal.completions_required = request.form.get('completions_required')
+    goal.num_of_completed = request.form.get('times_completed')
+    goal.reward = request.form.get('reward')
 
     # Check if checkbox was checked
     if request.form.get('is_completed'):
