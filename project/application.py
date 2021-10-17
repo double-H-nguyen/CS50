@@ -200,7 +200,15 @@ def login():
   return render_template("login.html")
 
 
-#TODO: Create Logout route
+@app.route('/logout')
+def logout():
+  # Forget any user_id
+  session.clear()
+
+  # Redirect user to login form
+  return redirect('/login')
+
+
 #TODO: Create Register route
 #TODO: Create Change password route
 #TODO: Create error message in helper function
