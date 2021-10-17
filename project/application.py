@@ -134,9 +134,25 @@ def update_goal(id):
 
   return render_template("update_goal.html", goal=goal)
 
-#TODO: Delete route
+
+@app.route('/delete_goal/<int:id>', methods=['GET', 'POST'])
+def delete_goal(id):
+  goal = Goals.query.get_or_404(id) 
+
+  if request.method == "POST":
+    try:
+      db.session.delete(goal)
+      db.session.commit()
+      return redirect('/')
+    except:
+      return 'Failed to delete goal'
+
+  return render_template("delete_goal.html", goal=goal)
+
+
 #TODO: Create Register route
 #TODO: Create Login route
+#TODO (optional): Allow user to delete their account (delete user and their goals)
 
 if __name__ == "__main__":
   db.create_all() # create tables if they haven't already been created

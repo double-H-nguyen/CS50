@@ -1,0 +1,18 @@
+{% extends "layout.html" %} 
+
+{% block title %} Delete {% endblock %} 
+
+{% block main %}
+<h1>Delete Goal</h1>
+<form action="/delete_goal/{{ goal.id }}" method="POST">
+  <div class="form-group">
+    <p>{{ goal.title }}</p>
+    <p>{{ goal.description }}</p>
+    <p>{{ goal.num_of_completions_required }}</p>
+    <p>{{ goal.reward }}</p>
+    <p>{{ goal.num_of_completed }}</p>
+    <p>{{ goal.is_completed }}</p>
+    <p>{{ goal.date_created }}</p>
+  </div>
+  <button class="btn btn-danger" type="submit">Delete</button>
+{% endblock %}
