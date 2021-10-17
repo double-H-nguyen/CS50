@@ -150,6 +150,26 @@ def delete_goal(id):
   return render_template("delete_goal.html", goal=goal)
 
 
+@app.route('/increment/<int:id>', methods=['GET'])
+def increment(id):
+  goal = Goals.query.get_or_404(id)
+
+  if goal.is_completed:
+    return 'Goal was already marked complete'
+  else:
+    goal.num_of_completed += 1
+
+  # Completions required has been reached, set the goal completion status
+  if goal.num_of_completed == goal.num_of_completions_required:
+    goal.is_completed = True
+
+  try:
+    db.session.commit()
+    return redirect('/')
+  except:
+    return 'Failed to increment goal'
+
+
 #TODO: Create Register route
 #TODO: Create Login route
 #TODO (optional): Allow user to delete their account (delete user and their goals)
