@@ -131,6 +131,7 @@ def update_goal(id):
     else: # form returned NONE
       goal.is_completed = False  
 
+    #! FIX: unable to cascade delete yet. either delete all goals first then user, or apply delete-cascade to database https://docs.sqlalchemy.org/en/14/orm/tutorial.html#tutorial-delete-cascade
     try:
       db.session.commit()
       return redirect('/')
@@ -276,8 +277,33 @@ def change_password():
   return render_template("change_password.html")
 
 
+@app.route('/delete_account', methods=['GET', 'POST'])
+@login_required
+def delete_account():
+  user_id = session["user_id"]
+  user = Users.query.get_or_404(user_id) 
+  goal_ct = int(Goals.query.filter_by(user_id=user_id).count())
+
+  if request.method == "POST":
+    password_input = request.form.get('password')
+    #TODO: input validation from helper function
+    # Check original password is correct
+    valid_password = check_password_hash(user.password, password_input)
+    if not valid_password:
+      return "Password was incorrect"
+
+    # Delete user
+    try:
+      db.session.delete(user)
+      db.session.commit()
+      return redirect('/login')
+    except:
+      return 'Failed to delete goal'
+
+  # GET
+  return render_template("delete_account.html", id=user.id, username=user.username, goal_ct=goal_ct)
+
 #TODO: Create error message in helper function
-#TODO (optional): Allow user to delete their account (delete user and their goals)
 
 if __name__ == "__main__":
   db.create_all() # create tables if they haven't already been created

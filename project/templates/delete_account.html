@@ -1,0 +1,15 @@
+{% extends "layout.html" %} 
+
+{% block title %}Delete Account{% endblock %}
+
+{% block main %}
+<h1>Delete Account</h1>
+<h2>{{ username }}, are you sure you want to permanently delete your account? You are currently tracking {{ goal_ct }} goals.</h2>
+<form action="/delete_account" method="POST">
+  <div class="form-group">
+    <label for="password">Confirm your password</label>
+    <input id="password" class="form-control" name="password" placeholder="Password" type="password">
+  </div>
+  <button class="btn btn-danger btn-lg btn-block" type="submit">Delete</button>
+</form>
+{% endblock %}
