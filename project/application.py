@@ -75,13 +75,13 @@ class Goals(db.Model):
 #*******************************************
 #* Routes
 #*******************************************
-@app.route('/', methods=['GET'])
+@app.route('/')
 @login_required
 def index():
   user_id = session["user_id"]
   
   # Query goals
-  goals = Goals.query.all()
+  goals = Goals.query.filter_by(user_id=user_id)
   return render_template("index.html", goals=goals)
 
 
@@ -154,7 +154,7 @@ def delete_goal(id):
   return render_template("delete_goal.html", goal=goal)
 
 
-@app.route('/increment/<int:id>', methods=['GET'])
+@app.route('/increment/<int:id>')
 @login_required
 def increment(id):
   goal = Goals.query.get_or_404(id)
