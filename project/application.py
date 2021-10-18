@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from flask_session import Session
 from tempfile import mkdtemp
 from datetime import datetime
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from helpers import login_required
 
@@ -90,11 +91,11 @@ def index():
 def add_goal():
   user_id = session["user_id"]
   if request.method == "POST":
-    #TODO: validate inputs on the front-end
     title = request.form.get('title')
     description = request.form.get('description')
     completions_required = request.form.get('completions_required')
     reward = request.form.get('reward')
+    #TODO: input validation from helper function
 
     # Add goal to database
     new_goal = Goals(title=title, description=description, num_of_completions_required=completions_required, reward=reward, user_id=user_id)
@@ -116,7 +117,7 @@ def update_goal(id):
   goal = Goals.query.filter_by(id=id, user_id=user_id).first_or_404() 
 
   if request.method == "POST":
-    #TODO: validate inputs on the front-end
+    #TODO: input validation from helper function
     # Update goal to database
     goal.title = request.form.get('title')
     goal.description = request.form.get('description')
@@ -180,16 +181,16 @@ def increment(id):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
   if request.method == "POST":
-    #TODO: input validation from helper function
     username_input = request.form.get('username')
     password_input = request.form.get('password')
+    #TODO: input validation from helper function
 
     # Query database for username
     user = Users.query.filter_by(username=username_input).first()
 
-    #TODO: implement check_password_hash after register route is complete
     # Check if username and password are correct
-    if (not user) or (user.password != password_input):
+    valid_password = check_password_hash(user.password, password_input)
+    if (not user) or (not valid_password):
       return 'Username or password was incorrect'
 
     # Remember which user has logged in
@@ -218,10 +219,12 @@ def register():
     password_input = request.form.get('password')
     confirmation_input = request.form.get('confirmation')
     #TODO: input validation from helper function
-    #TODO: hash password
+
+    # Hash password
+    hashed_password = generate_password_hash(password_input)
 
     # Add to database
-    new_user = Users(username=username_input, password=password_input)
+    new_user = Users(username=username_input, password=hashed_password)
     try:
       db.session.add(new_user)
       db.session.commit()
@@ -252,10 +255,17 @@ def change_password():
     new_password_input = request.form.get('new')
     confirmation_password_input = request.form.get('confirmation') 
     #TODO: input validation from helper function
-    #TODO: hash password
+
+    # Check original password is correct
+    valid_password = check_password_hash(user.password, original_password_input)
+    if not valid_password:
+      return "Original password was incorrect"
+
+    # Hash password
+    hashed_password = generate_password_hash(new_password_input)
 
     # Update user's password
-    user.password = new_password_input  
+    user.password = hashed_password  
     try:
       db.session.commit()
       return redirect('/')
