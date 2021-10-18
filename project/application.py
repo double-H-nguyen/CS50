@@ -111,9 +111,9 @@ def add_goal():
 @app.route('/update_goal/<int:id>', methods=['GET', 'POST'])
 @login_required
 def update_goal(id):
-  #! FIX: only update goal if it belongs to the user
+  user_id = session["user_id"]
   # Query goal (if it exist)
-  goal = Goals.query.get_or_404(id) 
+  goal = Goals.query.filter_by(id=id, user_id=user_id).first_or_404() 
 
   if request.method == "POST":
     #TODO: validate inputs on the front-end
@@ -142,8 +142,8 @@ def update_goal(id):
 @app.route('/delete_goal/<int:id>', methods=['GET', 'POST'])
 @login_required
 def delete_goal(id):
-  #! FIX: only delete goal if it belongs to the user
-  goal = Goals.query.get_or_404(id) 
+  user_id = session["user_id"]
+  goal = Goals.query.filter_by(id=id, user_id=user_id).first_or_404() 
 
   if request.method == "POST":
     try:
@@ -166,7 +166,7 @@ def increment(id):
   else:
     goal.num_of_completed += 1
 
-  # Completions required has been reached, set the goal completion status
+  # If completions required has been reached, set the goal completion status
   if goal.num_of_completed == goal.num_of_completions_required:
     goal.is_completed = True
 
