@@ -111,6 +111,7 @@ def add_goal():
 @app.route('/update_goal/<int:id>', methods=['GET', 'POST'])
 @login_required
 def update_goal(id):
+  #! FIX: only update goal if it belongs to the user
   # Query goal (if it exist)
   goal = Goals.query.get_or_404(id) 
 
@@ -141,6 +142,7 @@ def update_goal(id):
 @app.route('/delete_goal/<int:id>', methods=['GET', 'POST'])
 @login_required
 def delete_goal(id):
+  #! FIX: only delete goal if it belongs to the user
   goal = Goals.query.get_or_404(id) 
 
   if request.method == "POST":
@@ -209,7 +211,6 @@ def logout():
   return redirect('/login')
 
 
-#TODO: Create Register route
 @app.route('/register', methods=['GET', 'POST'])
 def register():
   if request.method == "POST":
@@ -232,7 +233,39 @@ def register():
   return render_template("register.html")
 
 
-#TODO: Create Change password route
+@app.route('/account')
+@login_required
+def account():
+  user_id = session["user_id"]
+  user = Users.query.get_or_404(user_id) 
+  return render_template ("account.html", username=user.username)
+
+
+@app.route('/change_password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+  user_id = session["user_id"]
+  user = Users.query.get_or_404(user_id) 
+
+  if request.method == "POST":
+    original_password_input = request.form.get('original')
+    new_password_input = request.form.get('new')
+    confirmation_password_input = request.form.get('confirmation') 
+    #TODO: input validation from helper function
+    #TODO: hash password
+
+    # Update user's password
+    user.password = new_password_input  
+    try:
+      db.session.commit()
+      return redirect('/')
+    except:
+      return "Unable to change password"
+
+  # GET
+  return render_template("change_password.html")
+
+
 #TODO: Create error message in helper function
 #TODO (optional): Allow user to delete their account (delete user and their goals)
 
