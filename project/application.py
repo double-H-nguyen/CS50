@@ -210,6 +210,28 @@ def logout():
 
 
 #TODO: Create Register route
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+  if request.method == "POST":
+    username_input = request.form.get('username')
+    password_input = request.form.get('password')
+    confirmation_input = request.form.get('confirmation')
+    #TODO: input validation from helper function
+    #TODO: hash password
+
+    # Add to database
+    new_user = Users(username=username_input, password=password_input)
+    try:
+      db.session.add(new_user)
+      db.session.commit()
+      return redirect('/')
+    except:
+      return "Registration was unsuccessful"
+
+  # GET
+  return render_template("register.html")
+
+
 #TODO: Create Change password route
 #TODO: Create error message in helper function
 #TODO (optional): Allow user to delete their account (delete user and their goals)
