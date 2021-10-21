@@ -105,7 +105,7 @@ def add_goal():
       db.session.commit()
       return redirect('/')
     except:
-      return "Failed to add goal to database"
+      return error("Failed to add goal to database")
 
   return render_template("add_goal.html")
 
@@ -136,7 +136,7 @@ def update_goal(id):
       db.session.commit()
       return redirect('/')
     except:
-      return 'Failed to update goal'
+      return error('Failed to update goal')
 
   return render_template("update_goal.html", goal=goal)
 
@@ -153,7 +153,7 @@ def delete_goal(id):
       db.session.commit()
       return redirect('/')
     except:
-      return 'Failed to delete goal'
+      return error('Failed to delete goal')
 
   return render_template("delete_goal.html", goal=goal)
 
@@ -176,7 +176,7 @@ def increment(id):
     db.session.commit()
     return redirect('/')
   except:
-    return 'Failed to increment goal'
+    return error('Failed to increment goal')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -192,7 +192,7 @@ def login():
     # Check if username and password are correct
     valid_password = check_password_hash(user.password, password_input)
     if (not user) or (not valid_password):
-      return 'Username or password was incorrect'
+      return error('Username or password was incorrect')
 
     # Remember which user has logged in
     session["user_id"] = user.id
@@ -231,7 +231,7 @@ def register():
       db.session.commit()
       return redirect('/')
     except:
-      return "Registration was unsuccessful"
+      return error("Registration was unsuccessful")
 
   # GET
   return render_template("register.html")
@@ -260,7 +260,7 @@ def change_password():
     # Check original password is correct
     valid_password = check_password_hash(user.password, original_password_input)
     if not valid_password:
-      return "Original password was incorrect"
+      return error("Original password was incorrect")
 
     # Hash password
     hashed_password = generate_password_hash(new_password_input)
@@ -271,7 +271,7 @@ def change_password():
       db.session.commit()
       return redirect('/')
     except:
-      return "Unable to change password"
+      return error("Unable to change password")
 
   # GET
   return render_template("change_password.html")
@@ -290,7 +290,7 @@ def delete_account():
     # Check original password is correct
     valid_password = check_password_hash(user.password, password_input)
     if not valid_password:
-      return "Password was incorrect"
+      return error("Password was incorrect")
 
     # Delete user
     try:
@@ -300,7 +300,7 @@ def delete_account():
       db.session.commit()
       return redirect('/logout')
     except:
-      return 'Failed to delete goal'
+      return error("Failed to delete goal")
 
   # GET
   return render_template("delete_account.html", id=user.id, username=user.username, goal_ct=goal_ct)
