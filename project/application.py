@@ -206,7 +206,7 @@ def login():
       return error(msg)
 
     # Query database for username
-    user = Users.query.filter_by(username=username).first()
+    user = Users.query.filter_by(username=username.upper()).first()
 
     # Check if username and password are correct
     if (not user) or (not check_password_hash(user.password, password)):
@@ -242,8 +242,14 @@ def register():
     is_valid, msg = register_validation(username, password, confirmation)
     if not is_valid:
       return error(msg)
+      
+    # Uppercase username before adding to database
+    username = username.upper()
 
-    #! Make sure username does not already exist
+    # Make sure username does not already exist
+    existing_user = Users.query.filter_by(username=username).first()
+    if existing_user:
+      return error("This username already exist")
 
     # Hash password
     hashed_password = generate_password_hash(password)
