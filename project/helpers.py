@@ -83,3 +83,15 @@ def update_goal_validation(title, description, completions_required, num_of_comp
     return False, "Reward field cannot be blank"
   
   return True, ""
+
+
+def login_validation(username, password):
+  # Username
+  if not username:
+    return False, "Username field cannot be blank"
+
+  # Password
+  if not password:
+    return False, "Password field cannot be blank"
+    
+  return True, ""

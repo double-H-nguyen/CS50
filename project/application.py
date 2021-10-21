@@ -7,7 +7,7 @@ from datetime import datetime
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import login_required, error, add_goal_validation, update_goal_validation
+from helpers import login_required, error, add_goal_validation, update_goal_validation, login_validation
 
 
 #*******************************************
@@ -196,16 +196,19 @@ def increment(id):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
   if request.method == "POST":
-    username_input = request.form.get('username')
-    password_input = request.form.get('password')
-    #TODO: input validation from helper function
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    # Validation
+    is_valid, msg = login_validation(username, password)
+    if not is_valid:
+      return error(msg)
 
     # Query database for username
-    user = Users.query.filter_by(username=username_input).first()
+    user = Users.query.filter_by(username=username).first()
 
     # Check if username and password are correct
-    valid_password = check_password_hash(user.password, password_input)
-    if (not user) or (not valid_password):
+    if (not user) or (not check_password_hash(user.password, password)):
       return error('Username or password was incorrect')
 
     # Remember which user has logged in
