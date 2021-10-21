@@ -4,9 +4,10 @@ from flask_migrate import Migrate
 from flask_session import Session
 from tempfile import mkdtemp
 from datetime import datetime
+from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import login_required
+from helpers import login_required, error
 
 
 #*******************************************
@@ -304,7 +305,18 @@ def delete_account():
   # GET
   return render_template("delete_account.html", id=user.id, username=user.username, goal_ct=goal_ct)
 
-#TODO: Create error message in helper function
+
+def errorhandler(e):
+  """Handle error"""
+  if not isinstance(e, HTTPException):
+    e = InternalServerError()
+  return error(e.name, e.code)
+
+
+# Listen for errors
+for code in default_exceptions:
+  app.errorhandler(code)(errorhandler)
+
 
 if __name__ == "__main__":
   db.create_all() # create tables if they haven't already been created
