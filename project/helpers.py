@@ -23,11 +23,7 @@ def error(message, code=400):
 #*******************************************
 #* Data Validation
 #*******************************************
-#TODO: write generic check blank field function
-#TODO: write generic check positive integer field function
-
 def add_goal_validation(title, description, completions_required, reward):
-
   # Title
   if not title: # check if blank
     return False, "Title field cannot be blank"
@@ -46,5 +42,44 @@ def add_goal_validation(title, description, completions_required, reward):
   if completions_required <= 0:
     return False, "Number of completions required field must be a positive value"
 
+  # Reward
+  if not reward:
+    return False, "Reward field cannot be blank"
+
   return True, ""
   
+
+def update_goal_validation(title, description, completions_required, num_of_completed, reward):
+  # Title
+  if not title: # check if blank
+    return False, "Title field cannot be blank"
+  
+  # Description
+  if not description:
+    return False, "Description field cannot be blank"
+
+  # Completions required
+  if not completions_required:
+    return False, "Number of completions required field cannot be blank"
+  try:
+    completions_required = int(completions_required)
+  except ValueError:
+    return False, "Number of completions required field can only include whole numbers"
+  if completions_required <= 0:
+    return False, "Number of completions required field must be a positive value"
+
+  # Number of times completed
+  if not num_of_completed:
+    return False, "Number of times completed field cannot be blank"
+  try:
+    num_of_completed = int(num_of_completed)
+  except ValueError:
+    return False, "Number of times completed field can only include whole numbers"
+  if num_of_completed < 0:
+    return False, "Number of times completed field must be a positive value"
+
+  # Reward
+  if not reward:
+    return False, "Reward field cannot be blank"
+  
+  return True, ""

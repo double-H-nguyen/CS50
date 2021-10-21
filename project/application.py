@@ -7,7 +7,7 @@ from datetime import datetime
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import login_required, error, add_goal_validation
+from helpers import login_required, error, add_goal_validation, update_goal_validation
 
 
 #*******************************************
@@ -122,13 +122,23 @@ def update_goal(id):
   goal = Goals.query.filter_by(id=id, user_id=user_id).first_or_404() 
 
   if request.method == "POST":
-    #TODO: input validation from helper function
+    title = request.form.get('title')
+    description = request.form.get('description')
+    completions_required = request.form.get('completions_required')
+    num_of_completed = request.form.get('times_completed')
+    reward = request.form.get('reward')
+
+    # Validation
+    is_valid, msg = update_goal_validation(title, description, completions_required, num_of_completed, reward)
+    if not is_valid:
+      return error(msg)
+
     # Update goal to database
-    goal.title = request.form.get('title')
-    goal.description = request.form.get('description')
-    goal.completions_required = request.form.get('completions_required')
-    goal.num_of_completed = request.form.get('times_completed')
-    goal.reward = request.form.get('reward')
+    goal.title = title
+    goal.description = description
+    goal.completions_required = completions_required
+    goal.num_of_completed = num_of_completed
+    goal.reward = reward
 
     # Check if checkbox was checked
     if request.form.get('is_completed'):
