@@ -131,7 +131,6 @@ def update_goal(id):
     else: # form returned NONE
       goal.is_completed = False  
 
-    #! FIX: unable to cascade delete yet. either delete all goals first then user, or apply delete-cascade to database https://docs.sqlalchemy.org/en/14/orm/tutorial.html#tutorial-delete-cascade
     try:
       db.session.commit()
       return redirect('/')
@@ -294,9 +293,11 @@ def delete_account():
 
     # Delete user
     try:
+      # IMPORTANT: Delete user's goals before deleting user
+      Goals.query.filter_by(user_id=user.id).delete()
       db.session.delete(user)
       db.session.commit()
-      return redirect('/login')
+      return redirect('/logout')
     except:
       return 'Failed to delete goal'
 
