@@ -136,7 +136,7 @@ def update_goal(id):
     # Update goal to database
     goal.title = title
     goal.description = description
-    goal.completions_required = completions_required
+    goal.num_of_completions_required = completions_required
     goal.num_of_completed = num_of_completed
     goal.reward = reward
 
