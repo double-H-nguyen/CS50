@@ -139,3 +139,11 @@ def change_password_validation(original_password, new_password, confirmation_pas
     return False, "New passwords do not match"
   
   return True, ""
+
+
+def delete_account_validation(password):
+  # Password
+  if not password:
+    return False, "Password field cannot be blank"
+  
+  return True, ""

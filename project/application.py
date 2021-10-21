@@ -7,7 +7,7 @@ from datetime import datetime
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import login_required, error, add_goal_validation, update_goal_validation, login_validation, register_validation, change_password_validation
+from helpers import login_required, error, add_goal_validation, update_goal_validation, login_validation, register_validation, change_password_validation, delete_account_validation
 
 
 #*******************************************
@@ -323,10 +323,15 @@ def delete_account():
   goal_ct = int(Goals.query.filter_by(user_id=user_id).count())
 
   if request.method == "POST":
-    password_input = request.form.get('password')
-    #TODO: input validation from helper function
+    password = request.form.get('password') 
+    
+    # Validation
+    is_valid, msg = delete_account_validation(password)
+    if not is_valid:
+      return error(msg)
+
     # Check original password is correct
-    valid_password = check_password_hash(user.password, password_input)
+    valid_password = check_password_hash(user.password, password)
     if not valid_password:
       return error("Password was incorrect")
 
