@@ -7,7 +7,7 @@ from datetime import datetime
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import login_required, error, add_goal_validation, update_goal_validation, login_validation
+from helpers import login_required, error, add_goal_validation, update_goal_validation, login_validation, register_validation
 
 
 #*******************************************
@@ -234,19 +234,27 @@ def logout():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
   if request.method == "POST":
-    username_input = request.form.get('username')
-    password_input = request.form.get('password')
-    confirmation_input = request.form.get('confirmation')
-    #TODO: input validation from helper function
+    username = request.form.get('username')
+    password = request.form.get('password')
+    confirmation = request.form.get('confirmation')
+
+    # Validation
+    is_valid, msg = register_validation(username, password, confirmation)
+    if not is_valid:
+      return error(msg)
 
     # Hash password
-    hashed_password = generate_password_hash(password_input)
+    hashed_password = generate_password_hash(password)
 
-    # Add to database
-    new_user = Users(username=username_input, password=hashed_password)
     try:
+      # Add to database
+      new_user = Users(username=username, password=hashed_password)
       db.session.add(new_user)
       db.session.commit()
+
+      # Login automatically
+      user = Users.query.filter_by(username=username).first()
+      session["user_id"] = user.id
       return redirect('/')
     except:
       return error("Registration was unsuccessful")

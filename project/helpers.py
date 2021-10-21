@@ -93,5 +93,25 @@ def login_validation(username, password):
   # Password
   if not password:
     return False, "Password field cannot be blank"
-    
+
+  return True, ""
+
+
+def register_validation(username, password, confirmation):
+  # Username
+  if not username:
+    return False, "Username field cannot be blank"
+
+  # Password
+  if not password:
+    return False, "Password field cannot be blank"
+
+  # Confirmation
+  if not confirmation:
+    return False, "Confirmation field cannot be blank"
+
+  # Check password and confirmation match
+  if password != confirmation:
+    return False, "Passwords do not match"
+  
   return True, ""
