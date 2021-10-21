@@ -7,7 +7,7 @@ from datetime import datetime
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import login_required, error, add_goal_validation, update_goal_validation, login_validation, register_validation
+from helpers import login_required, error, add_goal_validation, update_goal_validation, login_validation, register_validation, change_password_validation
 
 
 #*******************************************
@@ -243,6 +243,8 @@ def register():
     if not is_valid:
       return error(msg)
 
+    #! Make sure username does not already exist
+
     # Hash password
     hashed_password = generate_password_hash(password)
 
@@ -278,18 +280,22 @@ def change_password():
   user = Users.query.get_or_404(user_id) 
 
   if request.method == "POST":
-    original_password_input = request.form.get('original')
-    new_password_input = request.form.get('new')
-    confirmation_password_input = request.form.get('confirmation') 
-    #TODO: input validation from helper function
+    original_password = request.form.get('original')
+    new_password = request.form.get('new')
+    confirmation_password = request.form.get('confirmation')
+
+    # Validation
+    is_valid, msg = change_password_validation(original_password, new_password, confirmation_password)
+    if not is_valid:
+      return error(msg)
 
     # Check original password is correct
-    valid_password = check_password_hash(user.password, original_password_input)
+    valid_password = check_password_hash(user.password, original_password)
     if not valid_password:
       return error("Original password was incorrect")
 
     # Hash password
-    hashed_password = generate_password_hash(new_password_input)
+    hashed_password = generate_password_hash(new_password)
 
     # Update user's password
     user.password = hashed_password  

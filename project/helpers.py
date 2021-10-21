@@ -115,3 +115,27 @@ def register_validation(username, password, confirmation):
     return False, "Passwords do not match"
   
   return True, ""
+
+
+def change_password_validation(original_password, new_password, confirmation_password):
+  # Original password
+  if not original_password:
+    return False, "Original password field cannot be blank"
+
+  # New password
+  if not new_password:
+    return False, "New password field cannot be blank"
+
+  # Confirmation password
+  if not confirmation_password:
+    return False, "Confirmation field cannot be blank"
+
+  # Check password and new password do not match
+  if original_password == new_password:
+    return False, "New password cannot be the same as the old one"
+
+  # Check password and confirmation match
+  if new_password != confirmation_password:
+    return False, "New passwords do not match"
+  
+  return True, ""
