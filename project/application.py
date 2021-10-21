@@ -7,7 +7,7 @@ from datetime import datetime
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import login_required, error
+from helpers import login_required, error, add_goal_validation
 
 
 #*******************************************
@@ -96,7 +96,11 @@ def add_goal():
     description = request.form.get('description')
     completions_required = request.form.get('completions_required')
     reward = request.form.get('reward')
-    #TODO: input validation from helper function
+
+    # Validation
+    is_valid, msg = add_goal_validation(title, description, completions_required, reward)
+    if not is_valid:
+      return error(msg)
 
     # Add goal to database
     new_goal = Goals(title=title, description=description, num_of_completions_required=completions_required, reward=reward, user_id=user_id)
