@@ -175,10 +175,11 @@ def delete_goal(id):
 @app.route('/increment/<int:id>')
 @login_required
 def increment(id):
-  goal = Goals.query.get_or_404(id)
+  user_id = session["user_id"]
+  goal = Goals.query.filter_by(id=id, user_id=user_id).first_or_404()
 
   if goal.is_completed:
-    return 'Goal was already marked complete'
+    return error('Goal was already marked complete')
   else:
     goal.num_of_completed += 1
 
