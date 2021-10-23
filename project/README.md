@@ -24,7 +24,8 @@ The user will log their progress by pressing a button to increment their number 
 * CSS
   * Bootstrap
 * HTML
-* Database - Sqlite
+* Database
+  * SQLite
 
 ## New Stuff I Learned During This Project
 * How to use SQLAlchemy to create and interface with a Sqlite database via Flask
