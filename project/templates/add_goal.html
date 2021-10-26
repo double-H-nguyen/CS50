@@ -6,16 +6,20 @@
 <h1>Add Goal</h1>
 <form action="/add_goal" method="POST">
   <div class="form-group">
-    <input name="title" type="text" class="form-control" placeholder="Title" autocomplete="off" autofocus />
+    <label for="title">Title <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="A few words to summarize your goal (i.e. Do 10 pushups each day for 5 days)"></i></label>
+    <input id="title" name="title" type="text" class="form-control" autocomplete="off" autofocus/>
   </div>
   <div class="form-group">
-    <input name="description" type="text" class="form-control" placeholder="Description" autocomplete="off" autofocus />
+    <label for="description">Description <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="Describe the details of your goal (i.e. Establish a simple habit to promote regular exercise)"></i></label>
+    <textarea id="description" name="description" type="textarea" class="form-control" autocomplete="off" rows="5"></textarea>
   </div>
   <div class="form-group">
-    <input name="completions_required" type="text" class="form-control" placeholder="Number of completions required" autocomplete="off" autofocus />
+    <label for="completions_required">Number of Completions Required <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="How many times you would have to complete the goal before you get your reward (i.e. 5)"></i></label>
+    <input id="completions_required" name="completions_required" type="text" class="form-control" autocomplete="off" />
   </div>
   <div class="form-group">
-    <input name="reward" type="text" class="form-control" placeholder="Reward" autocomplete="off" autofocus />
+    <label for="reward">Reward <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right" title="A few words describing your reward (i.e. Buy a set of dumbbells)"></i></label>
+    <input id="reward" name="reward" type="text" class="form-control" autocomplete="off" />
   </div>
   <button class="btn btn-primary" type="submit">Add</button>
 </form>
