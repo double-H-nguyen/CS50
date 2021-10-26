@@ -105,6 +105,8 @@ def register_validation(username, password, confirmation):
   # Password
   if not password:
     return False, "Password field cannot be blank"
+  if len(password) < 12: # Password must be at least 12 characters long
+    return False, "Password needs to be at least 12 characters long"
 
   # Confirmation
   if not confirmation:
@@ -125,6 +127,8 @@ def change_password_validation(original_password, new_password, confirmation_pas
   # New password
   if not new_password:
     return False, "New password field cannot be blank"
+  if len(new_password) < 12: # Password must be at least 12 characters long
+    return False, "Password needs to be at least 12 characters long"
 
   # Confirmation password
   if not confirmation_password:
