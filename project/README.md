@@ -20,7 +20,6 @@ The user will log their progress by pressing a button to increment their number 
   * SQLAlchemy
   * Flask Session
 * JavaScript
-  * jQuery (for ajax)
 * CSS
   * Bootstrap
 * HTML
@@ -30,3 +29,4 @@ The user will log their progress by pressing a button to increment their number 
 ## New Stuff I Learned During This Project
 * How to use SQLAlchemy to create and interface with a Sqlite database via Flask
 * How to modify an existing database and keep track of changes (database migration)
+* How to create a progress bar using CSS
