@@ -22,7 +22,14 @@
       <td>{{ goal.title }}</td>
       <td>{{ goal.description }}</td>
       <td>{{ goal.date_created.date() }}</td>
-      <td>{{ goal.num_of_completed }}/{{ goal.num_of_completions_required }}</td>
+      <td>
+        {{ goal.num_of_completed }}/{{ goal.num_of_completions_required }}
+        <div class="progress">
+          <div class="progress-bar" style="width:{{ get_percentage(goal.num_of_completed, goal.num_of_completions_required) }}%;"> 
+              <div class="progress-value">{{ get_percentage(goal.num_of_completed, goal.num_of_completions_required) }}%</div>
+          </div>
+        </div>
+      </td>
       <td>{{ goal.is_completed }}</td>
       <td>{{ goal.reward }}</td>
       <td>

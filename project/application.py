@@ -7,7 +7,7 @@ from datetime import datetime
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import login_required, error, add_goal_validation, update_goal_validation, login_validation, register_validation, change_password_validation, delete_account_validation
+from helpers import login_required, error, add_goal_validation, update_goal_validation, login_validation, register_validation, change_password_validation, delete_account_validation, get_percentage
 
 
 #*******************************************
@@ -84,7 +84,7 @@ def index():
   
   # Query goals
   goals = Goals.query.filter_by(user_id=user_id)
-  return render_template("index.html", goals=goals)
+  return render_template("index.html", goals=goals, get_percentage=get_percentage)
 
 
 @app.route('/add_goal', methods=['GET', 'POST'])

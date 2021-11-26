@@ -1,5 +1,6 @@
 from flask import Flask, redirect, session, render_template
 from functools import wraps
+from math import floor
 
 
 def login_required(f):
@@ -18,6 +19,11 @@ def login_required(f):
 def error(message, code=400):
   """Render error message"""
   return render_template("error.html", msg=message, code=code)
+
+
+def get_percentage(numerator, denominator):
+  """return the percentage value (rounded down)"""
+  return floor(numerator / denominator * 100)
 
 
 #*******************************************
