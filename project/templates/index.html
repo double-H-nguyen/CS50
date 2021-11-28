@@ -4,45 +4,70 @@
 
 {% block main %}
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th scope="col">Title</th>
-      <th scope="col">Description</th>
-      <th scope="col">Date Created</th>
-      <th scope="col">Progress</th>
-      <th scope="col">Goal Completed?</th>
-      <th scope="col">Reward</th>
-      <th scope="col">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for goal in goals  %}
-    <tr>
-      <td>{{ goal.title }}</td>
-      <td>{{ goal.description }}</td>
-      <td>{{ goal.date_created.date() }}</td>
-      <td>
-        {{ goal.num_of_completed }}/{{ goal.num_of_completions_required }}
-        <div class="progress">
-          <div class="progress-bar" style="width:{{ get_percentage(goal.num_of_completed, goal.num_of_completions_required) }}%;"> 
-              <div class="progress-value">{{ get_percentage(goal.num_of_completed, goal.num_of_completions_required) }}%</div>
-          </div>
+<h2>In-Progress Goals</h2>
+<hr/>
+{% for goal in goals  %}
+  {% if not goal.is_completed %}
+  <div class="row">
+    <div class="col-sm">
+      <h3>{{ goal.title }}</h3>
+      <p class="lead">
+        <strong>Goal Description</strong> - {{ goal.description }}
+      </p>
+      <p class="lead">
+        <strong>Reward</strong> - {{ goal.reward }}
+      </p>
+      <div class="progress mb-3" style="height: 3em;">
+        <div class="progress-bar bg-success" style="width: {{ get_percentage(goal.num_of_completed, goal.num_of_completions_required) }}%;"> 
+            <div class="progress-value">{{ goal.num_of_completed }}/{{ goal.num_of_completions_required }} ({{ get_percentage(goal.num_of_completed, goal.num_of_completions_required) }}%)</div>
         </div>
-      </td>
-      <td>{{ goal.is_completed }}</td>
-      <td>{{ goal.reward }}</td>
-      <td>
-        <a href="/increment/{{ goal.id }}">Increment</a>
-        <br>
-        <a href="/update_goal/{{ goal.id }}">Update</a>
-        <br>
-        <a href="/delete_goal/{{ goal.id }}">Delete</a>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <a href="/increment/{{ goal.id }}" class="btn btn-outline-success">Increment</a>
+      <a href="/update_goal/{{ goal.id }}" class="btn btn-outline-primary">Update</a>
+      <a href="/delete_goal/{{ goal.id }}" class="btn btn-outline-danger">Delete</a>
+    </div>
+  </div>
+  <hr/>
+  {% endif %}
+{% endfor %}
+
+<h2>Completed Goals</h2>
+<hr/>
+{% for goal in goals  %}
+  {% if goal.is_completed %}
+  <div class="row">
+    <div class="col-sm">
+      <h3>{{ goal.title }}</h3>
+      <p class="lead">
+        <strong>Goal Description</strong> - {{ goal.description }}
+      </p>
+      <p class="lead">
+        <strong>Reward</strong> - {{ goal.reward }}
+      </p>
+      <div class="progress mb-3" style="height: 3em;">
+        <div class="progress-bar bg-success" style="width: {{ get_percentage(goal.num_of_completed, goal.num_of_completions_required) }}%;"> 
+            <div class="progress-value">
+              {{ goal.num_of_completed }}/{{ goal.num_of_completions_required }} 
+              ({{ get_percentage(goal.num_of_completed, goal.num_of_completions_required) }}%)
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <a href="/increment/{{ goal.id }}" class="btn btn-outline-success">Increment</a>
+      <a href="/update_goal/{{ goal.id }}" class="btn btn-outline-primary">Update</a>
+      <a href="/delete_goal/{{ goal.id }}" class="btn btn-outline-danger">Delete</a>
+    </div>
+  </div>
+  <hr/>
+  {% endif %}
+{% endfor %}
 
 {% endblock %}
 
