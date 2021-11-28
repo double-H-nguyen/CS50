@@ -16,12 +16,12 @@
     <script src="https://kit.fontawesome.com/7242ac13ea.js" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='layout.js') }}"></script>
 
-    <title>CS50 Final Project - {% block title %}{% endblock %}</title>
+    <title>Goalie - {% block title %}{% endblock %}</title>
   </head>
 
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="/">CS50 Final Project</a>
+      <a class="navbar-brand" href="/">Goalie</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -46,6 +46,6 @@
 
     <main class="container p-5">{% block main %}{% endblock %}</main>
 
-    <footer class="small text-center text-muted">Created by Henry Nguyen</footer>
+    <footer class="small text-center text-muted"><a href="https://cs50.harvard.edu/x/2021/project/" style = "color:#6c757d; text-decoration-line: underline;">CS50x 2021 Final Project</a>. Created by Henry Nguyen</footer>
   </body>
 </html>

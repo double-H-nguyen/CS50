@@ -3,16 +3,21 @@
 {% block title %} Delete {% endblock %} 
 
 {% block main %}
-<h1>Delete Goal</h1>
+<h1>Are you sure you want to delete "{{goal.title}}"?</h1>
+<hr/>
+<p class="delete-info">
+  <strong>Creation Date</strong> - {{ goal.date_created }}
+</p>
+<p class="delete-info">
+  <strong>Goal Description</strong> - {{ goal.description }}
+</p>
+<p class="delete-info">
+  <strong>Reward</strong> - {{ goal.reward }}
+</p>
+<p class="delete-info">
+  <strong>Progress</strong> - {{ goal.num_of_completed }}/{{ goal.num_of_completions_required }}
+</p>
 <form action="/delete_goal/{{ goal.id }}" method="POST">
-  <div class="form-group">
-    <p>{{ goal.title }}</p>
-    <p>{{ goal.description }}</p>
-    <p>{{ goal.num_of_completions_required }}</p>
-    <p>{{ goal.reward }}</p>
-    <p>{{ goal.num_of_completed }}</p>
-    <p>{{ goal.is_completed }}</p>
-    <p>{{ goal.date_created }}</p>
-  </div>
-  <button class="btn btn-danger" type="submit">Delete</button>
+  <button class="btn btn-block btn-lg btn-danger" type="submit">Delete Goal</button>
+</form> 
 {% endblock %}
