@@ -84,7 +84,19 @@ def index():
   
   # Query goals
   goals = Goals.query.filter_by(user_id=user_id)
-  return render_template("index.html", goals=goals, get_percentage=get_percentage)
+
+  # Count total goals, in-progress goals, and completed goals
+  total_goals = 0
+  in_progress_goals = 0
+  completed_goals = 0
+  for goal in goals:
+    total_goals += 1
+    if goal.is_completed:
+      completed_goals += 1
+    else:
+      in_progress_goals += 1
+
+  return render_template("index.html", goals=goals, get_percentage=get_percentage, total_goals=total_goals, in_progress_goals=in_progress_goals, completed_goals=completed_goals)
 
 
 @app.route('/add_goal', methods=['GET', 'POST'])
