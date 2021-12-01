@@ -1,6 +1,6 @@
-# YOUR PROJECT TITLE
+# Goalie
 
-## Video Demo:  <URL HERE>
+## Video Demo:  <https://youtu.be/IWRMzsx-BGc>
 
 ## Description:
 This is a web-based tool that tracks the user's goals and the respective reward for achieving their goal. This tool is intended for goals that require a fixed number of completions to check-off. If the goal is achieved, the user will be able to reward themselves with a clear conscious. Below are examples of suitable goals:
@@ -11,7 +11,7 @@ This is a web-based tool that tracks the user's goals and the respective reward 
 ## Scope
 This will be a minimum-viable-product (MVP). I hope to improve upon it after taking the CS50 Web Programming course.
 
-The user will enter their goal, provide a description (optional), number of completions required, and reward.
+The user will enter their goal, provide a description, number of completions required, and reward.
 
 The user will log their progress by pressing a button to increment their number of completed. When this value is equal to the number of completions, the reward will be unlocked.
 
@@ -29,4 +29,4 @@ The user will log their progress by pressing a button to increment their number 
 ## New Stuff I Learned During This Project
 * How to use SQLAlchemy to create and interface with a Sqlite database via Flask
 * How to modify an existing database and keep track of changes (database migration)
-* How to create a progress bar using CSS
+* How to use Bootstrap to quickly apply CSS to my html elements
